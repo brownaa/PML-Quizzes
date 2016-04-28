@@ -1,0 +1,23 @@
+---
+title: "Quiz 1"
+author: "Aaron Brown"
+date: "December 16, 2015"
+output: pdf_document
+---
+
+# Question 1  
+Answer:  
+  * Collecting data to answer the question.
+
+#Question 2  
+Answer: Our algorithm may be overfitting the training data, predicting both the signal and the noise.  
+
+#Question 3  
+Answer: 80% in the training set, 20% in the testing set.  
+
+#Question 4  
+Answer:
+ * pecificity
+
+#Question 5  
+Answer: 9%

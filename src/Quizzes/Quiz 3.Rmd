@@ -1,0 +1,50 @@
+---
+title: "Quiz 3"
+author: "Aaron Brown"
+date: "May 2, 2016"
+output: pdf_document
+---
+
+# Question 1  
+```{r}
+#load the cell segmentation data
+library(AppliedPredictiveModeling)
+data(segmentationOriginal)
+library(caret)
+library(caTools)
+
+set.seed(125)
+
+split = sample.split(segmentationOriginal$Case, SplitRatio = 8/10)
+
+
+```
+
+#Question 2  
+```{r}
+
+```
+Answer: There is a non-random pattern in the plot of the outcome versus index that does not appear to be perfectly explained by any predictor suggesting a variable may be missing.
+
+#Question 3  
+```{r}
+
+```
+
+Answer: There are a large number of values that are the same and even if you took the log(SuperPlasticizer + 1) they would still all be identical so the distribution would not be symmetric.
+
+#Question 4  
+```{r} 
+
+
+```
+
+Answer: `r a4$numComp`
+
+#Question 5  
+```{r}
+
+```
+
+Answer: Non-PCA accuracy: `r no.PCA.accuracy`  
+            PCA accuracy: `r PCA.accuracy`

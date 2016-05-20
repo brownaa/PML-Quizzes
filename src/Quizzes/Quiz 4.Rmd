@@ -1,0 +1,142 @@
+---
+title: "Quiz 4"
+author: "Aaron Brown"
+date: "May 15, 2016"
+output: html_document
+---
+
+```{r}
+require(knitr)
+opts_knit$set(root.dir = normalizePath(".."))
+getwd()
+```
+
+
+# Question 1  
+```{r Question1}
+library(ElemStatLearn)
+require(caret)
+data(vowel.train)
+data(vowel.test) 
+vowel.train$y = as.factor(vowel.train$y)
+vowel.test$y  = as.factor(vowel.test$y)
+
+set.seed(33833)
+
+modelFit1 = train(y ~ ., method = "rf", data = vowel.train)
+modelFit2 = train(y ~ ., method = "gbm", data = vowel.train)
+pred1 = predict(modelFit1, newdata = vowel.test)
+pred2 = predict(modelFit2, newdata = vowel.test)
+a.rf = confusionMatrix(pred1, vowel.test$y)
+a.rf$overall[1]
+confusionMatrix(vowel.test$y, pred2)
+a.gbm = confusionMatrix(pred1,        pred2)
+a.gbm$overall[1]
+same = pred1 == pred2
+
+a.both = confusionMatrix(vowel.test$y[same], pred2[same])
+a.both$overall[1]
+```
+
+Answer:  The following was selected from the list of available choices but does not match my answer exactly.
+
+RF Accuracy = 0.6082
+
+GBM Accuracy = 0.5152
+
+Agreement Accuracy = 0.6361 
+
+# Question 2  
+```{r Question 2, cache = TRUE}
+library(caret)
+library(gbm)
+set.seed(3433)
+library(AppliedPredictiveModeling)
+data(AlzheimerDisease)
+adData = data.frame(diagnosis,predictors)
+inTrain = createDataPartition(adData$diagnosis, p = 3/4)[[1]]
+training = adData[ inTrain,]
+testing = adData[-inTrain,]
+
+set.seed(62433)
+modelrf = train(diagnosis ~ ., method = "rf", data = training)
+modelgbm = train(diagnosis ~ ., method = "gbm", data = training)
+modellda = train(diagnosis ~ ., method = "lda", data = training)
+predrf = predict(modelrf, testing)
+predgbm = predict(modelgbm, testing)
+predlda = predict(modellda, testing)
+predDF = data.frame(predrf, predgbm, predlda, diagnosis = testing$diagnosis)
+
+model.comb = train(diagnosis ~ ., method = "rf", data = predDF)
+predcomb = predict(model.comb, testing)
+
+confusionMatrix(predrf, testing$diagnosis)$overall[1]
+confusionMatrix(predgbm, testing$diagnosis)$overall[1]
+confusionMatrix(predlda, testing$diagnosis)$overall[1]
+confusionMatrix(predcomb, testing$diagnosis)$overall[1]
+```
+
+Answer: Stacked Accuracy: 0.80 is better than random forests and lda and the same as boosting.  
+
+# Question 3  
+```{r Question 3}
+set.seed(3523)
+library(AppliedPredictiveModeling)
+data(concrete)
+inTrain = createDataPartition(concrete$CompressiveStrength, p = 3/4)[[1]]
+training = concrete[ inTrain,]
+testing = concrete[-inTrain,]
+
+set.seed(233)
+
+model = train(CompressiveStrength ~ ., method = "lasso", data = training)
+plot.enet(model$finalModel, xvar = "penalty")
+```
+
+Answer: Cement
+
+# Question 4  
+```{r Question 4}
+# if(!file.exists("./data/gaData.csv"))
+#     download.file(
+#         url = 'https://d396qusza40orc.cloudfront.net/predmachlearn/gaData.csv',
+#         destfile = './data/gaData.csv')
+
+# library(lubridate) # For year() function below
+# dat = read.csv("./data/gaData.csv")
+# training = dat[year(dat$date) < 2012,]
+# testing = dat[(year(dat$date)) > 2011,]
+# tstrain = ts(training$visitsTumblr)
+# 
+# require(forecast)
+# 
+# model <- bats(tstrain)
+# forecastmodel <- forecast(model, h = nrow(testing), level = 95)
+# str(forecastmodel)
+# 
+# a4 <- 1 - sum(forecastmodel$upper < testing$visitsTumblr | 
+#         forecastmodel$lower > testing$visitsTumblr) / nrow(testing)
+```
+
+Answer: 
+
+# Question 5  
+```{r Question 5}
+set.seed(3523)
+library(AppliedPredictiveModeling)
+data(concrete)
+inTrain = createDataPartition(concrete$CompressiveStrength, p = 3/4)[[1]]
+training = concrete[ inTrain,]
+testing = concrete[-inTrain,]
+
+set.seed(325)
+require(e1071)
+require(forecast)
+
+modelsvm = svm(CompressiveStrength ~ ., data = training)
+pred = predict(modelsvm, testing)
+
+a5 = accuracy(pred, testing$CompressiveStrength)[2]
+```
+
+Answer:  `r a5`
